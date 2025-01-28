@@ -1,2 +1,3 @@
 # flask-app
-Simple Flask App
+
+Flask Job Applicant App with Docker + Sqlite + SqlAlchemy
