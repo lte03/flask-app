@@ -1,0 +1,50 @@
+{% extends layout %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Applications for: {{ advertisement.Title }}</h3>
+            <p><strong>Position:</strong> {{ advertisement.Position }}</p>
+            
+            {% if applications %}
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Applicant Name</th>
+                                <th>Email</th>
+                                <th>Apply Date</th>
+                                <th>CV</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for application in applications %}
+                                <tr>
+                                    <td>{{ application.applicant_name }}</td>
+                                    <td>{{ application.applicant_email }}</td>
+                                    <td>{{ application.ApplyDate.strftime('%Y-%m-%d %H:%M') }}</td>
+                                    <td>
+                                        <a href="{{ url_for('download_cv', application_id=application.Id) }}" 
+                                           class="btn btn-sm btn-primary">
+                                            <span class="glyphicon glyphicon-download-alt"></span> Download CV
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="alert alert-info">
+                    No applications received yet for this position.
+                </div>
+            {% endif %}
+            
+            <a href="{{ url_for('home') }}" class="btn btn-default">
+                <span class="glyphicon glyphicon-arrow-left"></span> Back to Listings
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

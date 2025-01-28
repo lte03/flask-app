@@ -1,0 +1,182 @@
+{% extends layout %}
+
+{% block content %}
+    {% if current_user.is_authenticated %}
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    {% if current_user.role.Name == "Hire" %}
+                        <h3 class="text-center">{{ current_user.company.Name }} - Job Listings</h3>
+                        <div class="form-group text-center">
+                            <a href="{{ url_for('publish_adveristment') }}" class="btn btn-success">Publish New Job</a>
+                        </div>
+                        {% if company_ads %}
+                            <div class="margin-top-20">
+                                {% for ad in company_ads %}
+                                    <div class="panel panel-default">
+                                        <div class="panel-body">
+                                            <h4>{{ ad.Title }}</h4>
+                                            <h5 class="text-muted">Position: {{ ad.Position }}</h5>
+                                            <p>{{ ad.Description }}</p>
+                                            <div class="margin-top-10">
+                                                <a href="{{ url_for('edit_ad', ad_id=ad.Id) }}" class="btn btn-sm btn-info">Edit</a>
+                                                <form action="{{ url_for('delete_ad', ad_id=ad.Id) }}" method="POST" style="display:inline;">
+                                                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                                </form>
+                                                <a href="{{ url_for('view_applications', ad_id=ad.Id) }}" class="btn btn-sm btn-primary">
+                                                    <span class="glyphicon glyphicon-user"></span> View Applications
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="alert alert-info" role="alert">
+                                No advertisements posted yet. Use the button above to publish your first job listing!
+                            </div>
+                        {% endif %}
+                    {% elif current_user.role.Name == "Applicant" %}
+                        <div class="row mb-4">
+                            <div class="col-md-4">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4>Companies</h4>
+                                    </div>
+                                    <div class="list-group">
+                                        <a href="{{ url_for('home') }}" class="list-group-item {% if not selected_company %}active{% endif %}">
+                                            All Companies
+                                        </a>
+                                        {% for company in companies %}
+                                            <a href="{{ url_for('home', company_id=company.Id) }}" 
+                                               class="list-group-item {% if selected_company and selected_company.Id == company.Id %}active{% endif %}">
+                                                {{ company.Name }}
+                                            </a>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-8">
+                                <h4>Available Job Listings {% if selected_company %}for {{ selected_company.Name }}{% endif %}</h4>
+                                {% if ads %}
+                                    <div class="margin-top-20">
+                                        {% for ad in ads %}
+                                            <div class="panel panel-default">
+                                                <div class="panel-body">
+                                                    <h4>{{ ad.Title }}</h4>
+                                                    <h5 class="text-muted">Company: {{ ad.company_name }}</h5>
+                                                    <p>Position: {{ ad.Position }}</p>
+                                                    <p>{{ ad.Description }}</p>
+                                                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#applyModal" data-id="{{ ad.Id }}">
+                                                        Apply
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% else %}
+                                    <div class="alert alert-info">
+                                        No job listings available at the moment.
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Apply Modal -->
+        <div class="modal fade" id="applyModal" tabindex="-1" role="dialog" aria-labelledby="applyModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="applyModalLabel">Apply for Job</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="applyForm" method="POST" enctype="multipart/form-data" action="{{ url_for('apply') }}">
+                            <input type="hidden" id="ad_id" name="ad_id">
+                            <div class="form-group">
+                                <label for="cv" class="control-label">Upload Your CV</label>
+                                <input type="file" class="form-control" id="cv" name="cv" required>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Submit Application</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <h1>Welcome to the Job Application Portal</h1>
+                    <p>Your gateway to fast and easy job applications!</p>
+                    <hr>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <h3>Why Choose Our Portal?</h3>
+                    <ul class="list-unstyled">
+                        <li><span class="glyphicon glyphicon-ok"></span> Fast and easy application process</li>
+                        <li><span class="glyphicon glyphicon-ok"></span> Save your resume and personal information</li>
+                        <li><span class="glyphicon glyphicon-ok"></span> Receive job alerts based on your profile</li>
+                        <li><span class="glyphicon glyphicon-ok"></span> Apply to multiple jobs with a single click</li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <h3>How It Works</h3>
+                    <div class="well">
+                        <p>1. Create an account and complete your profile.</p>
+                        <p>2. Browse job listings that match your skills.</p>
+                        <p>3. Apply to jobs instantly with one click!</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row text-center">
+                <div class="col-md-6">
+                    <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg">Login</a>
+                </div>
+                <div class="col-md-6">
+                    <a href="{{ url_for('register') }}" class="btn btn-success btn-lg">Sign Up</a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="alert-container">
+                <ul class="list-unstyled">
+                    {% for category, message in messages %}
+                        <li class="alert alert-{{ category }}">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            {{ message }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    {% endwith %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+    $(document).ready(function() {
+        $('#applyModal').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget);
+            var adId = button.data('id');
+            $(this).find('#ad_id').val(adId);
+        });
+    });
+</script>
+{% endblock %}

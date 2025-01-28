@@ -1,0 +1,64 @@
+{% extends layout %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>My Applications</h2>
+            <hr>
+            
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            {% if applications %}
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>Company</th>
+                                <th>Position</th>
+                                <th>Job Title</th>
+                                <th>Application Date</th>
+                                <th>CV</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for app in applications %}
+                                <tr>
+                                    <td>{{ app.company_name }}</td>
+                                    <td>{{ app.Position }}</td>
+                                    <td>{{ app.Title }}</td>
+                                    <td>{{ app.ApplyDate.strftime('%Y-%m-%d %H:%M') }}</td>
+                                    <td>
+                                        {% if app.CV_Path %}
+                                            <span class="label label-success">
+                                                <i class="glyphicon glyphicon-ok"></i> Uploaded
+                                            </span>
+                                        {% else %}
+                                            <span class="label label-danger">
+                                                <i class="glyphicon glyphicon-remove"></i> Not Found
+                                            </span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="alert alert-info">
+                    <i class="glyphicon glyphicon-info-sign"></i>
+                    You haven't made any job applications yet.
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

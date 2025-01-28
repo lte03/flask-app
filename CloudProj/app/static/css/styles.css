@@ -1,0 +1,114 @@
+/* Genel Stil Ayarları */
+body {
+    padding-top: 200px;
+}
+
+#message {
+    resize: none;
+}
+
+/* Navbar Stilleri */
+.navbar {
+    background-color: #343a40;
+    border-color: #343a40;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 9999;
+}
+
+.navbar a {
+    color: white !important;
+    transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+.navbar a:hover {
+    color: #f8f9fa !important;
+    background-color: #495057;
+}
+
+.navbar a:active,
+.navbar a:hover {
+    background-color: #343a40;
+    color: #ccc !important;
+}
+
+.navbar .navbar-brand {
+    color: white !important;
+}
+
+.navbar .navbar-toggle .icon-bar {
+    background-color: white;
+}
+
+/* Alert Sistemleri */
+.alert-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    width: auto;
+    max-width: 300px;
+}
+
+.flashes {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.flashes .alert {
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: opacity 0.5s ease-out;
+}
+
+.alert-success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.alert-info {
+    background-color: #cce5ff;
+    color: #004085;
+}
+
+.alert-warning {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* Container Stilleri */
+.container.login-container {
+    margin-bottom: 100px;
+}
+
+/* Navbar Stilinde tekrarı engelleme */
+.navbar-default {
+    border: none;
+    background-color: #333;
+    color: white;
+}
+
+.navbar-default .navbar-nav > li > a {
+    color: white;
+}
+
+.navbar-default .navbar-nav > li > a:hover {
+    background-color: #575757;
+}
+
+.navbar-default .navbar-brand {
+    color: white !important;
+}
+
+.navbar-default .navbar-toggle .icon-bar {
+    background-color: white;
+}

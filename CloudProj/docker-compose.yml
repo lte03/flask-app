@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  pythonproje:
+    build: ./app
+    ports:
+      - "81:6001"
+    volumes:
+      - ./app:/app
+      - cv_storage:/app/uploads/cvs
+    environment:
+      - FLASK_ENV=production
+      - FLASK_APP=app.py
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run --token YOUR_CLOUDFLARED_TUNEL_KEY
+    network_mode: "host"
+    depends_on:
+      - pythonproje
+
+volumes:
+  cv_storage:

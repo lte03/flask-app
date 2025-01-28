@@ -1,0 +1,59 @@
+{% extends layout %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h2 class="page-header">Companies</h2>
+            <div class="row">
+                {% for company in companies %}
+                <div class="col-md-4 col-sm-6 mb-4">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">{{ company.Name }}</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="company-stats">
+                                <p><strong>Active Job Postings:</strong> {{ company.advertisements|length }}</p>
+                            </div>
+                            {% if company.advertisements|length > 0 %}
+                            <div class="text-center mt-3">
+                                <a href="{{ url_for('home') }}#company-{{ company.Id }}" class="btn btn-primary">
+                                    View Job Postings
+                                </a>
+                            </div>
+                            {% else %}
+                            <div class="text-center mt-3">
+                                <button class="btn btn-default" disabled>No Active Postings</button>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            {% if not companies %}
+            <div class="alert alert-info text-center">
+                <p>No companies found in the system.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+    .mb-4 {
+        margin-bottom: 20px;
+    }
+    .mt-3 {
+        margin-top: 15px;
+    }
+    .company-stats {
+        margin-bottom: 15px;
+    }
+    .page-header {
+        margin-bottom: 30px;
+    }
+</style>
+{% endblock %}
